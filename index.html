@@ -85,6 +85,24 @@
     #confirmationMessage .box h3{margin:0 0 .4rem}
     #confirmationMessage .box p{margin:.2rem 0 0}
   </style>
+
+  <script>
+    /* 全域錯誤攔截（若有錯誤，畫面左下角會顯示） */
+    window.addEventListener('error', function(e){
+      const box = document.createElement('div');
+      box.style.cssText = 'position:fixed;left:12px;bottom:12px;max-width:92vw;background:#fee2e2;color:#991b1b;padding:10px 12px;border:1px solid #fecaca;border-radius:10px;z-index:9999;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre-wrap;box-shadow:0 6px 18px rgba(0,0,0,.15)';
+      box.textContent = '[Error] ' + (e.message||'Uncaught error');
+      document.body.appendChild(box);
+      setTimeout(()=> box.remove(), 6000);
+    });
+    window.addEventListener('unhandledrejection', function(e){
+      const box = document.createElement('div');
+      box.style.cssText = 'position:fixed;left:12px;bottom:12px;max-width:92vw;background:#fef3c7;color:#92400e;padding:10px 12px;border:1px solid #fde68a;border-radius:10px;z-index:9999;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre-wrap;box-shadow:0 6px 18px rgba(0,0,0,.15)';
+      box.textContent = '[Promise] ' + (e.reason && (e.reason.stack||e.reason.message) || 'Unhandled rejection');
+      document.body.appendChild(box);
+      setTimeout(()=> box.remove(), 6000);
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -452,14 +470,12 @@
       // 3) 環境沒有預設信箱 → 下載明細（延遲一點避免與瀏覽器動作衝突）
       setTimeout(()=>{ downloadText(`亮睿_訂單_${Date.now()}.txt`, plain); }, 400);
 
-      // 依你的需求：送出後【立刻清空購物車】並更新 UI + 顯示確認 Overlay
+      // 依需求：送出後【立刻清空購物車】、更新 UI、顯示確認 Overlay
       clearCart();
       renderOrderSummary();
       $('#cartPanel').classList.remove('open');
       e.target.reset();
       $('#confirmationMessage').style.display = 'flex';
-
-      // 便利性：3 秒後自動關閉，也可手動關閉
       setTimeout(()=>{ $('#confirmationMessage').style.display = 'none'; }, 3000);
 
       // 自我測試：清空後長度應為 0
@@ -477,18 +493,20 @@
     // --------- Minimal Self Tests (run once) ---------
     (function runSelfTests(){
       try{
-        const snapshot = JSON.parse(JSON.stringify(cart));
+        const bak = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
         cart = []; saveCart();
         addToCart('p1'); addToCart('p1'); addToCart('p2');
         console.assert(cart.length === 2, '[TEST] cart length should be 2');
         console.assert(cartSubtotal() === 199*2 + 169, '[TEST] subtotal calculation');
         console.assert(formatNTD(1200) === 'NT$1,200', '[TEST] formatNTD');
-        // 運費門檻測試
         const sub = cartSubtotal();
         const ship = sub>=1200?0:100;
         console.assert(ship === 100, '[TEST] shipping threshold when subtotal < 1200');
+        clearCart();
+        console.assert(cart.length === 0, '[TEST] clearCart empties cart');
+        cart = bak; saveCart();
       }catch(err){ console.error('[TEST] failed:', err); }
-      finally{ cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); renderCart(); }
+      finally{ renderCart(); }
     })();
 
     // Init
