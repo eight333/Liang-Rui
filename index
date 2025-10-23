@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>亮睿有限公司｜居家清潔・玻璃清洗・清潔用品</title>
+  <meta name="description" content="亮睿有限公司提供居家清潔、玻璃清洗服務，並販售嚴選清潔用品。統一編號：60778373。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --brand:#15aabf;/* teal */
+      --brand-dark:#0b7285;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --bg:#f8fafc;
+      --surface:#ffffff;
+      --ok:#2f9e44;
+      --warn:#f08c00;
+      --danger:#d9480f;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:"Noto Sans TC",system-ui,-apple-system,Segoe UI,Roboto; color:var(--ink); background:var(--bg)}
+    a{color:var(--brand);text-decoration:none}
+    header{position:sticky;top:0;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(10px); border-bottom:1px solid #eef2f7; z-index:50}
+    .nav{max-width:1100px;margin:auto;display:flex;align-items:center;gap:20px;padding:12px 16px}
+    .logo{font-weight:900;letter-spacing:1px}
+    .nav a{padding:8px 10px;border-radius:10px;color:var(--ink)}
+    .nav a:hover{background:#eef7fa}
+    .spacer{flex:1}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-radius:12px;border:1px solid #dbe7ee;background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn.primary:hover{background:var(--brand-dark)}
+    .btn.ghost{background:transparent}
+    .container{max-width:1100px;margin:auto;padding:28px 16px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+    .heroCard{background:linear-gradient(135deg,#e6fcf5,#e3fafc);padding:28px;border-radius:var(--radius);box-shadow:0 8px 24px rgba(16,24,40,.06)}
+    .hero h1{margin:.2em 0 .4em;font-size:clamp(28px,4vw,40px)}
+    .hero p{color:var(--muted);font-size:1.05rem}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .kpi{background:var(--surface);border:1px solid #e6eef4;padding:16px;border-radius:12px;text-align:center}
+    .kpi b{font-size:1.3rem}
+    .cardGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:var(--surface);border:1px solid #e6eef4;border-radius:var(--radius);padding:18px;box-shadow:0 6px 16px rgba(16,24,40,.05)}
+    .card h3{margin:.2em 0 .4em}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#e7f7fb;color:var(--brand-dark);font-size:.85rem}
+    .price{font-weight:800;font-size:1.2rem}
+    .muted{color:var(--muted)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .list{margin:0;padding-left:18px}
+    .surface{background:var(--surface);border:1px solid #e6eef4;border-radius:var(--radius);padding:18px}
+    footer{margin-top:40px;background:#0b7285;color:#e6f4f7}
+    footer .container{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
+    footer a{color:#e6f4f7}
+    .tiny{font-size:.9rem}
+    /* Cart */
+    .cart{position:fixed;right:16px;bottom:16px;z-index:60}
+    .cartPanel{position:fixed;right:16px;bottom:84px;width:min(420px,92vw);max-height:70vh;overflow:auto;background:#fff;border:1px solid #dbe7ee;border-radius:16px;box-shadow:0 18px 42px rgba(2, 55, 77, .18);display:none}
+    .cartPanel.open{display:block}
+    .cartItem{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px dashed #eef2f7}
+    .qtyCtrl{display:flex;gap:6px;align-items:center}
+    .qtyBtn{width:28px;height:28px;border-radius:7px;border:1px solid #cfe3ea;background:#f6fbfd;cursor:pointer}
+    .totals{display:flex;justify-content:space-between;align-items:center;padding:12px 14px}
+    .input, select, textarea{width:100%;padding:10px 12px;border:1px solid #dbe7ee;border-radius:10px}
+    form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .sectionTitle{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
+    .badge{background:#ecfdf5;color:#147d50;padding:4px 8px;border-radius:999px;font-size:.85rem}
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .cardGrid{grid-template-columns:1fr 1fr}
+      footer .container{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .cardGrid{grid-template-columns:1fr}
+      form .row{grid-template-columns:1fr}
+    }
+    /* Toast */
+    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#0b7285;color:#e6f4f7;padding:10px 14px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.15);opacity:0;pointer-events:none;transition:opacity .3s;z-index:90;font-size:.95rem}
+    #toast.show{opacity:1}
+    /* Confirmation Overlay */
+    #confirmationMessage{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center}
+    #confirmationMessage .box{background:#0b7285;color:#e6f4f7;padding:24px 28px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:92vw}
+    #confirmationMessage .box h3{margin:0 0 .4rem}
+    #confirmationMessage .box p{margin:.2rem 0 0}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">🧼 亮睿清潔</div>
+      <a href="#services">服務項目</a>
+      <a href="#products">清潔用品</a>
+      <a href="#booking">預約/估價</a>
+      <a href="#about">關於我們</a>
+      <div class="spacer"></div>
+      <button class="btn" id="openCartBtn">🛒 購物車 <span id="cartCount" class="pill" style="margin-left:8px">0</span></button>
+      <a class="btn primary" href="#booking">立即預約</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="home">
+      <div class="heroCard">
+        <span class="pill">居家清潔・玻璃清洗・清潔用品</span>
+        <h1>專業省心的清潔夥伴，讓家務回歸輕鬆。</h1>
+        <p>亮睿有限公司提供 <b>居家清潔</b>、<b>玻璃清洗</b>、<b>定期保養</b> 與 <b>嚴選清潔用品</b>。透明報價、到府服務、保險齊全，讓您放心把整潔交給我們。</p>
+        <div class="kpis">
+          <div class="kpi"><b>4.9/5</b><div class="muted">顧客好評</div></div>
+          <div class="kpi"><b>48H內</b><div class="muted">快速排程</div></div>
+          <div class="kpi"><b>100%</b><div class="muted">到府自備工具</div></div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#booking" class="btn primary">取得報價</a>
+          <a href="#products" class="btn">選購清潔用品</a>
+        </div>
+      </div>
+      <div class="surface">
+        <h3 style="margin-top:0">本月限定</h3>
+        <ul class="list">
+          <li>首購「全能濃縮清潔劑」第二件 <b>5 折</b></li>
+          <li>預約居家清潔 4 小時，玻璃清洗 <b>9 折</b></li>
+          <li>消費滿 NT$1,200 享 <b>免運</b></li>
+        </ul>
+        <p class="tiny muted">活動至本月月底，恕不與其他優惠併用。</p>
+      </div>
+    </section>
+
+    <section id="services" style="margin-top:30px">
+      <div class="sectionTitle">
+        <h2>服務項目</h2>
+        <span class="badge">可開立發票</span>
+      </div>
+      <div class="cardGrid">
+        <div class="card">
+          <h3>🏠 居家清潔</h3>
+          <p class="muted">地板、廚衛、灰塵除塵、家電表面清潔等。自備工具與環保清潔劑。</p>
+          <p class="price">NT$900 / 小時 / 人</p>
+          <p class="tiny muted">* 最少 3 小時起，停車費另計。</p>
+          <a href="#booking" class="btn">預約此服務</a>
+        </div>
+        <div class="card">
+          <h3>🪟 玻璃清洗</h3>
+          <p class="muted">內外窗、氣窗、紗窗清洗與水痕處理。高樓外牆不含吊掛作業。</p>
+          <p class="price">NT$60 / 坪 起</p>
+          <p class="tiny muted">* 依現場高度與數量報價。</p>
+          <a href="#booking" class="btn">預約此服務</a>
+        </div>
+        <div class="card">
+          <h3>🔁 定期到府保養</h3>
+          <p class="muted">每週、雙週或每月固定清潔，省時又省心。長約享優惠。</p>
+          <p class="price">NT$800 / 小時 / 人</p>
+          <a href="#booking" class="btn">了解方案</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" style="margin-top:36px">
+      <div class="sectionTitle">
+        <h2>清潔用品</h2>
+        <div class="muted tiny">所有價格含稅，滿 NT$1,200 免運</div>
+      </div>
+      <div class="cardGrid" id="productGrid"></div>
+    </section>
+
+    <section id="booking" style="margin-top:36px">
+      <h2>預約 / 詢價</h2>
+      <div class="grid-2">
+        <form id="bookingForm" class="surface">
+          <div class="row">
+            <div>
+              <label>姓名</label>
+              <input class="input" name="name" required placeholder="王小明" />
+            </div>
+            <div>
+              <label>聯絡電話</label>
+              <input class="input" name="phone" required placeholder="0912-345-678" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>服務項目</label>
+              <select name="service" class="input">
+                <option value="居家清潔">居家清潔</option>
+                <option value="玻璃清洗">玻璃清洗</option>
+                <option value="定期保養">定期保養</option>
+              </select>
+            </div>
+            <div>
+              <label>期望日期</label>
+              <input class="input" type="date" name="date" />
+            </div>
+          </div>
+          <label>服務地址</label>
+          <input class="input" name="address" placeholder="○○市○○區○○路○○號" />
+          <label>備註</label>
+          <textarea class="input" name="note" rows="4" placeholder="可附上窗戶數量、坪數、想處理的清潔重點…"></textarea>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <button type="submit" class="btn primary">送出預約</button>
+            <a class="btn ghost" href="#">回頂部</a>
+          </div>
+          <p class="tiny muted">送出後會產生一封草擬信件，您可直接寄出或修改內容，我們將於 24 小時內回覆。</p>
+        </form>
+        <div class="surface">
+          <h3 style="margin-top:0">服務流程</h3>
+          <ol class="list">
+            <li>填寫預約資料或購物車結帳備註</li>
+            <li>客服電話確認需求與估價</li>
+            <li>派工到府服務（自備工具）</li>
+            <li>完工後開立發票與回饋問卷</li>
+          </ol>
+          <h3>常見問答</h3>
+          <p><b>Q.</b> 是否可自備清潔劑？<br><span class="muted">A. 可，我們亦可提供環保配方。</span></p>
+          <p><b>Q.</b> 高樓外窗能洗嗎？<br><span class="muted">A. 在安全可及範圍內可處理；需吊掛者請另議。</span></p>
+          <p><b>Q.</b> 是否開立發票？<br><span class="muted">A. 是，本公司有使用統一發票。</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="checkout" style="margin-top:36px">
+      <div class="sectionTitle">
+        <h2>購物車結帳</h2>
+        <span class="muted tiny">目前採貨到付款 / 轉帳，填寫資料後將由專員與您確認。</span>
+      </div>
+      <div class="grid-2">
+        <div class="surface">
+          <h3 style="margin-top:0">訂單摘要</h3>
+          <div id="orderSummary"></div>
+        </div>
+        <form id="checkoutForm" class="surface">
+          <div class="row">
+            <div>
+              <label>姓名</label>
+              <input class="input" name="name" required />
+            </div>
+            <div>
+              <label>電話</label>
+              <input class="input" name="phone" required />
+            </div>
+          </div>
+          <label>收件地址</label>
+          <input class="input" name="address" required />
+          <label>備註</label>
+          <textarea class="input" name="note" rows="4" placeholder="統一編號、發票抬頭、到貨時段偏好…"></textarea>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <button type="submit" class="btn primary">送出訂單</button>
+            <button type="button" class="btn" id="clearCart">清空購物車</button>
+          </div>
+          <p class="tiny muted">請詳細確認訂購內容，送出訂單後恕無法修改。</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div class="cart">
+    <div class="cartPanel" id="cartPanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #eef2f7">
+        <b>購物車</b>
+        <button class="btn" id="closeCartBtn">關閉</button>
+      </div>
+      <div id="cartItems"></div>
+      <div class="totals">
+        <div>
+          <div class="muted tiny">小計</div>
+          <div id="cartSubtotal" class="price">NT$0</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a class="btn" href="#checkout" id="goCheckout">前往結帳</a>
+          <button class="btn" id="clearCart2">清空</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer id="about">
+    <div class="container">
+      <div>
+        <h3 style="margin-top:0">🧽 亮睿有限公司</h3>
+        <p class="tiny">統一編號：<b>60778373</b><br/>服務信箱：service@liangrui.example<br/>服務時間：週一～週六 09:00–18:00</p>
+        <p class="tiny">© <span id="year"></span> 亮睿有限公司．Liang-Rui</p>
+      </div>
+      <div>
+        <h4>快速導覽</h4>
+        <p class="tiny"><a href="#services">服務項目</a>｜<a href="#products">清潔用品</a>｜<a href="#booking">預約</a>｜<a href="#checkout">結帳</a></p>
+      </div>
+      <div>
+        <h4>公司資訊</h4>
+        <p class="tiny">公司名稱：<b>亮睿有限公司</b><br>統一編號：<b>60778373</b></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast & Confirmation Overlay -->
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="confirmationMessage" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDesc">
+    <div class="box">
+      <h3 id="confirmTitle">我們已收到您的訂購 ✅</h3>
+      <p id="confirmDesc">感謝您的支持！我們將盡快與您電話確認與出貨安排。</p>
+      <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" id="confirmCloseBtn">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --------- Utilities ---------
+    const $ = (sel)=>document.querySelector(sel);
+    const $$ = (sel)=>document.querySelectorAll(sel);
+    const formatNTD = (n)=>`NT$${n.toLocaleString('zh-TW')}`;
+
+    // --------- Product Data ---------
+    const PRODUCTS = [
+      {id:'p1', name:'全能濃縮清潔劑 1L', price:199, unit:'瓶', desc:'廚房/地板皆適用，低泡易沖洗。'},
+      {id:'p2', name:'玻璃亮光水 500ml', price:169, unit:'瓶', desc:'快速去水痕不殘留，無香精。'},
+      {id:'p3', name:'除霉漂潔劑 600ml', price:189, unit:'瓶', desc:'浴室矽利康/磁縫專用，免刷配方。'},
+      {id:'p4', name:'環保生物酵素除臭劑 1L', price:239, unit:'瓶', desc:'分解異味源，寵物友善。'},
+      {id:'p5', name:'木質地板護理劑 800ml', price:249, unit:'瓶', desc:'溫和不傷木，形成保護薄膜。'},
+      {id:'p6', name:'超細纖維抹布 (5入)', price:149, unit:'包', desc:'高吸水不掉棉絮，乾濕兩用。'},
+      {id:'p7', name:'可替換海綿菜瓜布 (4入)', price:99, unit:'包', desc:'雙面材質，耐刷耐用。'},
+      {id:'p8', name:'伸縮玻璃刮 28–45cm', price:299, unit:'支', desc:'高處玻璃清潔好幫手。'},
+      {id:'p9', name:'無痕掛勾 (10入)', price:129, unit:'組', desc:'耐重 3kg，浴室廚房皆可用。'},
+      {id:'p10', name:'濾網集塵紙 (30入)', price:119, unit:'包', desc:'適用多數排風扇尺寸。'}
+    ];
+
+    // --------- State ---------
+    const CART_KEY = 'liangrui_cart_v1';
+    let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+    function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+    // --------- Render Products ---------
+    function renderProducts(){
+      const grid = $('#productGrid');
+      grid.innerHTML = PRODUCTS.map(p=>`
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <h3 style="margin:0">${p.name}</h3>
+            <span class="pill">${p.unit}</span>
+          </div>
+          <p class="muted">${p.desc}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="price">${formatNTD(p.price)}</div>
+            <button class="btn" onclick="addToCart('${p.id}')">加入購物車</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --------- Cart Logic ---------
+    function addToCart(id){
+      const item = cart.find(i=>i.id===id);
+      if(item){ item.qty += 1; }
+      else{ const p = PRODUCTS.find(x=>x.id===id); cart.push({id:p.id,name:p.name,price:p.price,qty:1}); }
+      saveCart();
+      renderCart();
+      $('#cartPanel').classList.add('open');
+    }
+
+    function removeFromCart(id){ cart = cart.filter(i=>i.id!==id); saveCart(); renderCart(); }
+    function changeQty(id,delta){ const it = cart.find(i=>i.id===id); if(!it) return; it.qty = Math.max(1, it.qty+delta); saveCart(); renderCart(); }
+    function clearCart(){ cart = []; saveCart(); renderCart(); }
+
+    function cartSubtotal(){ return cart.reduce((s,i)=>s+i.price*i.qty,0); }
+
+    function renderCart(){
+      $('#cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+      const items = $('#cartItems');
+      if(cart.length===0){ items.innerHTML = `<div style="padding:18px" class="muted">購物車目前是空的</div>`; }
+      else{
+        items.innerHTML = cart.map(i=>`
+          <div class="cartItem">
+            <div>
+              <div><b>${i.name}</b></div>
+              <div class="tiny muted">${formatNTD(i.price)} × ${i.qty}</div>
+            </div>
+            <div class="qtyCtrl">
+              <button class="qtyBtn" onclick="changeQty('${i.id}',-1)">−</button>
+              <div>${i.qty}</div>
+              <button class="qtyBtn" onclick="changeQty('${i.id}',1)">＋</button>
+            </div>
+            <div>
+              <button class="btn" onclick="removeFromCart('${i.id}')">移除</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      $('#cartSubtotal').textContent = formatNTD(cartSubtotal());
+      renderOrderSummary();
+    }
+
+    // --------- Checkout ---------
+    function renderOrderSummary(){
+      const box = $('#orderSummary');
+      if(cart.length===0){ box.innerHTML = '<p class="muted">尚無商品。</p>'; return; }
+      const lines = cart.map(i=>`<div style="display:flex;justify-content:space-between"><span>${i.name} × ${i.qty}</span><b>${formatNTD(i.price*i.qty)}</b></div>`).join('');
+      const sub = cartSubtotal();
+      const ship = sub>=1200?0:100;
+      const total = sub+ship;
+      box.innerHTML = `
+        <div class="surface" style="border:none;padding:0">
+          ${lines}
+          <hr style="border:none;border-top:1px dashed #e5e7eb;margin:10px 0">
+          <div style="display:flex;justify-content:space-between"><span class="muted">小計</span><span>${formatNTD(sub)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">運費</span><span>${ship===0?'<span class="badge">免運</span>':formatNTD(ship)}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:1.1rem;margin-top:6px"><span><b>合計</b></span><span><b>${formatNTD(total)}</b></span></div>
+        </div>`;
+    }
+
+    // Booking form => mailto draft
+    $('#bookingForm').addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      const subject = encodeURIComponent(`【預約】${data.service}｜${data.name}`);
+      const body = encodeURIComponent(`姓名：${data.name}\n電話：${data.phone}\n服務項目：${data.service}\n期望日期：${data.date||'-'}\n地址：${data.address||'-'}\n備註：${data.note||'-'}\n\n— 由網站表單送出`);
+      window.location.href = `mailto:service@liangrui.example?subject=${subject}&body=${body}`;
+    });
+
+    // Checkout helpers
+    function showToast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2500); }
+    function downloadText(filename, text){
+      const blob = new Blob([text], {type: 'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+    }
+
+    // Checkout form => mailto + fallbacks + confirmation overlay
+    $('#checkoutForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(cart.length===0){ alert('購物車是空的'); return; }
+
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      const lines = cart.map(i=>`${i.name} × ${i.qty} = ${i.price*i.qty}`).join('\n');
+      const sub = cartSubtotal();
+      const ship = sub>=1200?0:100;
+      const total = sub+ship;
+
+      const subject = encodeURIComponent(`【下單】${data.name}｜訂單與寄送資訊`);
+      const plain = `訂購人：${data.name}\n電話：${data.phone}\n地址：${data.address}\n備註：${data.note||'-'}\n\n— 訂單明細 —\n${lines}\n小計：${sub}\n運費：${ship}\n合計：${total}\n\n統一編號：60778373\n發票抬頭：亮睿有限公司`;
+      const body = encodeURIComponent(plain);
+      const mailto = `mailto:order@liangrui.example?subject=${subject}&body=${body}`;
+
+      // 1) 嘗試開信件草稿（新分頁），2) 若被擋則改用同分頁
+      let opened = false;
+      try{ opened = !!window.open(mailto, '_blank'); }catch(err){ /* noop */ }
+      if(!opened){ window.location.href = mailto; }
+
+      // 3) 環境沒有預設信箱 → 下載明細（延遲一點避免與瀏覽器動作衝突）
+      setTimeout(()=>{ downloadText(`亮睿_訂單_${Date.now()}.txt`, plain); }, 400);
+
+      // 依你的需求：送出後【立刻清空購物車】並更新 UI + 顯示確認 Overlay
+      clearCart();
+      renderOrderSummary();
+      $('#cartPanel').classList.remove('open');
+      e.target.reset();
+      $('#confirmationMessage').style.display = 'flex';
+
+      // 便利性：3 秒後自動關閉，也可手動關閉
+      setTimeout(()=>{ $('#confirmationMessage').style.display = 'none'; }, 3000);
+
+      // 自我測試：清空後長度應為 0
+      try{ console.assert(cart.length === 0, '[TEST] cart should be cleared after submit'); }catch(_){}
+    });
+
+    // Buttons & toggles
+    $('#openCartBtn').addEventListener('click',()=>$('#cartPanel').classList.toggle('open'));
+    $('#closeCartBtn').addEventListener('click',()=>$('#cartPanel').classList.remove('open'));
+    $('#goCheckout').addEventListener('click',()=>$('#cartPanel').classList.remove('open'));
+    $('#clearCart').addEventListener('click',()=>{ if(confirm('確定清空購物車？')){ clearCart(); }});
+    $('#clearCart2').addEventListener('click',()=>{ if(confirm('確定清空購物車？')){ clearCart(); }});
+    $('#confirmCloseBtn').addEventListener('click',()=> $('#confirmationMessage').style.display='none');
+
+    // --------- Minimal Self Tests (run once) ---------
+    (function runSelfTests(){
+      try{
+        const snapshot = JSON.parse(JSON.stringify(cart));
+        cart = []; saveCart();
+        addToCart('p1'); addToCart('p1'); addToCart('p2');
+        console.assert(cart.length === 2, '[TEST] cart length should be 2');
+        console.assert(cartSubtotal() === 199*2 + 169, '[TEST] subtotal calculation');
+        console.assert(formatNTD(1200) === 'NT$1,200', '[TEST] formatNTD');
+        // 運費門檻測試
+        const sub = cartSubtotal();
+        const ship = sub>=1200?0:100;
+        console.assert(ship === 100, '[TEST] shipping threshold when subtotal < 1200');
+      }catch(err){ console.error('[TEST] failed:', err); }
+      finally{ cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); renderCart(); }
+    })();
+
+    // Init
+    renderProducts();
+    renderCart();
+    $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
